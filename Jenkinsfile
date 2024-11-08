@@ -28,22 +28,11 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            steps {
-                script {
-                    echo "Running SonarQube Analysis"
-                    
-                    withSonarQubeEnv(SONARQUBE_SERVER) {
-                        sh '''
-                            sonar-scanner \
-                                -Dsonar.projectKey=your_project_key \
-                                -Dsonar.sources=. \
-                                -Dsonar.host.url=$SONAR_HOST_URL \
-                                -Dsonar.login=$SONARQUBE_TOKEN
-                        '''
-                    }
-                }
-            }
-        }
+    def scannerHome = tool 'SonarQube_Scanner';
+    withSonarQubeEnv() {
+      sh "${scannerHome}/bin/sonar-scanner"
+    }
+  }
         stage('Deliver') {
             steps {
                 echo 'Deliver....'
