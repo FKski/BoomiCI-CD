@@ -27,12 +27,15 @@ pipeline {
                 '''
             }
         }
-        stage('SonarQube Analysis') {
-    def scannerHome = tool 'SonarQube_Scanner';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
+        stage('SCM') {
+    checkout scm
   }
+        stage('SonarQube Analysis') {
+            def scannerHome = tool 'SonarQube_Scanner';
+            withSonarQubeEnv() {
+            sh "${scannerHome}/bin/sonar-scanner"
+            }
+        }
         stage('Deliver') {
             steps {
                 echo 'Deliver....'
